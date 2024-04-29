@@ -19,6 +19,6 @@ app.use(function(req, res, next) {
 });
 
 app.listen(port, () => {
-  console.log(`HELLO WORLD started listening on port ${port}`);
+  console.log(`HELLO WORLD: started listening on port ${port}`);
 });
 
