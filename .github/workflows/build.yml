@@ -34,11 +34,11 @@ jobs:
       id: build-image
       run: |
         export GIT_HASH=$(git rev-parse --short HEAD)
-        echo ./build.sh   ${{ECR_REGISTRY}}/${{env.ECR_REPO}} ${GIT_HASH}
-        echo ./publish.sh ${{ECR_REGISTRY}}/${{env.ECR_REPO}} ${GIT_HASH}
+        echo ./build.sh   ${{env.ECR_REGISTRY}}/${{env.ECR_REPO}} ${GIT_HASH}
+        echo ./publish.sh ${{env.ECR_REGISTRY}}/${{env.ECR_REPO}} ${GIT_HASH}
 
         ./build.sh
-        ./publish.sh ${{ECR_REGISTRY}}/${{env.ECR_REPO}}:${GIT_HASH}
+        ./publish.sh ${{env.ECR_REGISTRY}}/${{env.ECR_REPO}}:${GIT_HASH}
       env:
         AWS_REGION:       ${{ vars.AWS_REGION }}
         ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
