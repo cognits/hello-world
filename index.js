@@ -4,19 +4,19 @@ const port = process.env.APP_PORT || 3000;
 
 // root path
 app.get('/', (req, res) => {
-    console.log('200 GET /');
+    console.log('GET /');
     res.send('Hello World!')
 });
 
 // healthcheck path
 app.get('/healthcheck', (req, res) => {
-    console.log('200 GET /healthcheck');
+    console.log('GET /healthcheck');
     res.sendStatus(200);
 });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    console.log(`404 ${req.method} ${req.url}`);
+    console.log(`${req.method} ${req.url}`);
     res.send('Not found');
 });
 
