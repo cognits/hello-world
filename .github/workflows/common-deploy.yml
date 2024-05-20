@@ -44,6 +44,15 @@ jobs:
 
     - name: Determine TAG to deploy
       run: |
+        echo "🔷 git tag"
+        git tag
+        echo "🔷 git fetch --tags"
+        git fetch --tags
+        echo "🔷 git tag"
+        git tag
+
+        echo "🟣 GITHUB_BASE_REF=$GITHUB_BASE_REF"
+        echo "🟣 git tag --merged $GITHUB_BASE_REF"
         TAG=$( git tag --merged $GITHUB_BASE_REF | tail -n 1 )
 
-        echo "TAG=$TAG"
+        echo "🟣 TAG=$TAG"
