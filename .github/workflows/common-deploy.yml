@@ -63,6 +63,9 @@ jobs:
 
         echo "🟣 GITHUB_BASE_REF=$GITHUB_BASE_REF"
         echo "🟣 git tag --merged $GITHUB_BASE_REF"
+        git tag --merged $GITHUB_BASE_REF
+
+        echo "🟣 TAG=$( git tag --merged $GITHUB_BASE_REF | tail -n 1 )"
         TAG=$( git tag --merged $GITHUB_BASE_REF | tail -n 1 )
 
         echo "🟣 TAG=$TAG"
