@@ -33,9 +33,11 @@ jobs:
 
     - name: Determine TAG to be deployed at this branch
       run: |
+        # target (in a pR)
         echo GITHUB_BASE_REF=$GITHUB_BASE_REF
-        echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
-        echo GITHUB_REF=$GITHUB_REF
-        echo GITHUB_REF_NAME=$GITHUB_REF_NAME
-        echo GITHUB_SHA=$GITHUB_SHA
 
+        # source (in a PR)
+        echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
+
+        echo "show branches"
+        git branch -a
