@@ -1,4 +1,4 @@
-name: Build
+name: Build Deploy
 
 on:
   pull_request:
@@ -11,8 +11,11 @@ env:
   AWS_REGION: ${{ vars.AWS_REGION }}
 
 jobs:
+  # ---------------------------------------------
+  #              Build job
+  # ---------------------------------------------
   build-job:
-    name: Docker image build
+    name: Build
     runs-on: ubuntu-latest
 
     # check the PR was actually merged, not simply closed

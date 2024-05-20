@@ -31,13 +31,19 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Determine TAG to be deployed at this branch
+    #- name: Debug branches and variables
+    #  run: |
+    #    # target (in a pR)
+    #    echo "GITHUB_BASE_REF (target) = $GITHUB_BASE_REF"
+    #
+    #    # source (in a PR)
+    #    echo "GITHUB_HEAD_REF (source) = $GITHUB_HEAD_REF"
+    #
+    #    echo "show branches"
+    #    git branch -a
+
+    - name: Determine TAG to deploy
       run: |
-        # target (in a pR)
-        echo "GITHUB_BASE_REF (target) = $GITHUB_BASE_REF"
+        TAG=$( git tag --merged master | tail -n 1 )
 
-        # source (in a PR)
-        echo "GITHUB_HEAD_REF (source) = $GITHUB_HEAD_REF"
-
-        echo "show branches"
-        git branch -a
+        echo "TAG=$TAG"
