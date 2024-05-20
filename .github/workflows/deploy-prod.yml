@@ -1,0 +1,25 @@
+name: Deploy Prod
+
+on:
+  pull_request:
+    branches:
+      master
+    types:
+      - closed
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+
+jobs:
+  # ---------------------------------------------
+  #              Deploy
+  # ---------------------------------------------
+  deploy-job:
+    name: Deploy on Prod
+    needs: build-job
+
+    secrets: inherit
+    uses: ./.github/workflows/common-deploy.yml
+    with:
+      stage_name: prodd
+      
