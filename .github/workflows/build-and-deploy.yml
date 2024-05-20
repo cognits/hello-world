@@ -55,11 +55,33 @@ jobs:
       #    ECR_REPO:         hello-world
 
   # ---------------------------------------------
+  #              Job: Tag Staging
+  # ---------------------------------------------
+  tag-deployment:
+    name: Tag Deployment
+    needs: build-job
+
+    environment: staging
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Tag version
+        run: |
+          ./version-gen.sh
+          TAG=$( ./version-gen.sh | tail -n 1)
+          echo "TAG=$TAG"
+
+          #git tag $TAG HEAD
+          #git push --tags
+
+  # ---------------------------------------------
   #              Deploy
   # ---------------------------------------------
   deploy-job:
     name: Deploy on Dev
-    needs: build-job
+    needs: tag-deployment
 
     secrets: inherit
     uses: ./.github/workflows/common-deploy.yml
