@@ -47,7 +47,7 @@ jobs:
         echo "🔷 git tag"
         git tag
         echo "🔷 git fetch --tags"
-        git fetch --tags
+        git fetch --tags --force
         echo "🔷 git tag"
         git tag
 
