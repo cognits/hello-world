@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     # check the PR was actually merged, not simply closed
-    #if: |
-    #  github.event.pull_request.merged == true
+    if: |
+      github.event.pull_request.merged == true
 
     steps:
       - name: Dump GitHub context
