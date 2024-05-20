@@ -16,10 +16,9 @@ jobs:
   # ---------------------------------------------
   deploy-job:
     name: Deploy on Prod
-    needs: build-job
 
     secrets: inherit
     uses: ./.github/workflows/common-deploy.yml
     with:
-      stage_name: prodd
+      stage_name: prod
       
