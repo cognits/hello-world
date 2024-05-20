@@ -1,0 +1,92 @@
+name: Build Deploy
+
+on:
+  pull_request:
+    branches:
+      develop
+    types:
+      - closed
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+
+jobs:
+  # ---------------------------------------------
+  #              Build job
+  # ---------------------------------------------
+  build-job:
+    name: Build
+    runs-on: ubuntu-latest
+
+    # check the PR was actually merged, not simply closed
+    if: |
+      github.event.pull_request.merged == true
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: true
+
+      #- name: Build, tag and push image
+      #  id: build-image
+      #  run: |
+      #    export GIT_HASH=$(git rev-parse --short HEAD)
+      #    echo ./build.sh   ${{env.ECR_REGISTRY}}/${{env.ECR_REPO}} ${GIT_HASH}
+      #    echo ./publish.sh ${{env.ECR_REGISTRY}}/${{env.ECR_REPO}} ${GIT_HASH}
+      #
+      #    ./build.sh
+      #    ./publish.sh ${{env.ECR_REGISTRY}}/${{env.ECR_REPO}}:${GIT_HASH}
+      #  env:
+      #    AWS_REGION:       ${{ vars.AWS_REGION }}
+      #    ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+      #    ECR_REPO:         hello-world
+
+  # ---------------------------------------------
+  #              Job: Tag Staging
+  # ---------------------------------------------
+  tag-deployment:
+    name: Tag Deployment
+    needs: build-job
+
+    environment: staging
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Tag version
+        run: |
+          ./version-gen.sh
+          TAG=$( ./version-gen.sh | tail -n 1)
+          echo "🟣 TAG=$TAG"
+
+          git tag $TAG HEAD
+          git push --tags
+
+  # ---------------------------------------------
+  #              Deploy
+  # ---------------------------------------------
+  deploy-job:
+    name: Deploy on Dev
+    needs: tag-deployment
+
+    secrets: inherit
+    uses: ./.github/workflows/common-deploy.yml
+    with:
+      stage_name: dev
+      

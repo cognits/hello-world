@@ -19,6 +19,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -31,11 +33,10 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Determine TAG to be deployed at this branch
+    - name: Determine TAG to deploy
       run: |
-        echo GITHUB_BASE_REF=$GITHUB_BASE_REF
-        echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
-        echo GITHUB_REF=$GITHUB_REF
-        echo GITHUB_REF_NAME=$GITHUB_REF_NAME
-        echo GITHUB_SHA=$GITHUB_SHA
+        echo "🔷 git tag"
+        git tag
 
+        TAG=$( git tag --merged $GITHUB_BASE_REF | tail -n 1 )
+        echo "🟣 TAG=$TAG"

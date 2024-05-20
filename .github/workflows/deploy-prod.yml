@@ -1,24 +1,25 @@
-name: Deploy Dev
+name: Deploy Prod
+
 on:
   pull_request:
     branches:
-      - master
+      master
     types:
       - closed
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
 
 jobs:
   # ---------------------------------------------
   #              Deploy
   # ---------------------------------------------
   deploy-job:
-    name: Deployment
-
-    # check the PR was actually merged, not simply closed
-    if: |
-      github.event.pull_request.merged == true
+    name: Deploy on Prod
+    needs: build-job
 
     secrets: inherit
     uses: ./.github/workflows/common-deploy.yml
     with:
-      stage_name: dev
+      stage_name: prodd
       
