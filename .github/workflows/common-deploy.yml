@@ -1,0 +1,41 @@
+# This workflow will build and push a new container image to Amazon ECR,
+# and then will deploy a new task definition to Amazon ECS, when there is a push to the "develop" branch.
+#
+name: Deployment
+on:
+  workflow_call:
+    inputs:
+      stage_name:
+        description: The stage name, i.e. 'dev', 'prod', 'staging'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{inputs.stage_name}}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region:            ${{ vars.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Determine TAG to be deployed at this branch
+      run: |
+        echo GITHUB_BASE_REF=$GITHUB_BASE_REF
+        echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
+        echo GITHUB_REF=$GITHUB_REF
+        echo GITHUB_REF_NAME=$GITHUB_REF_NAME
+        echo GITHUB_SHA=$GITHUB_SHA
+

@@ -1,0 +1,24 @@
+name: Deploy Dev
+on:
+  pull_request:
+    branches:
+      - development
+    types:
+      - closed
+
+jobs:
+  # ---------------------------------------------
+  #              Deploy
+  # ---------------------------------------------
+  deploy-job:
+    name: Deployment
+
+    # check the PR was actually merged, not simply closed
+    if: |
+      github.event.pull_request.merged == true
+
+    secrets: inherit
+    uses: ./.github/workflows/common-deploy.yml
+    with:
+      stage_name: dev
+      
