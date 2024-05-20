@@ -44,10 +44,18 @@ jobs:
 
     - name: Determine TAG to deploy
       run: |
+        echo "🔷 git fetch --tags --force"
+        git fetch --tags --force
         echo "🔷 git tag"
         git tag
-        echo "🔷 git fetch --tags"
-        git fetch --tags --force
+
+        echo "🔷 git fetch --tags origin"
+        git fetch --tags origin
+        echo "🔷 git tag"
+        git tag
+
+        echo "🔷 git fetch --tags origin --force"
+        git fetch --tags origin --force
         echo "🔷 git tag"
         git tag
 
