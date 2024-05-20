@@ -33,17 +33,6 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    #- name: Debug branches and variables
-    #  run: |
-    #    # target (in a pR)
-    #    echo "GITHUB_BASE_REF (target) = $GITHUB_BASE_REF"
-    #
-    #    # source (in a PR)
-    #    echo "GITHUB_HEAD_REF (source) = $GITHUB_HEAD_REF"
-    #
-    #    echo "show branches"
-    #    git branch -a
-
     - name: Determine TAG to deploy
       run: |
         echo "🔷 git tag"

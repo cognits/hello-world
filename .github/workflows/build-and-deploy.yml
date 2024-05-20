@@ -73,10 +73,10 @@ jobs:
         run: |
           ./version-gen.sh
           TAG=$( ./version-gen.sh | tail -n 1)
-          echo "TAG=$TAG"
+          echo "🟣 TAG=$TAG"
 
-          #git tag $TAG HEAD
-          #git push --tags
+          git tag $TAG HEAD
+          git push --tags
 
   # ---------------------------------------------
   #              Deploy
